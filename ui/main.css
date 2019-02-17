@@ -3,8 +3,11 @@
 }
 .title{
   height:40px;
-  font-style: oblique;
+  font-style:oblique;
   font-family: fantasy;
+}
+.autocomplete-list{
+  display: list-item;
 }
 .container{
   width:100%;

@@ -31,24 +31,23 @@ function submitForm(event){
 }
 }
 function searchCountries(event){
+  var datalist;
+  var prev= document.getElementsByTagName('DATALIST');
+    if(prev.length>0){
+      datalist=prev[0]
+    }else{
+      var datalist= document.createElement("DATALIST");
+      datalist.setAttribute("class","autocomplete-list","id","countries");
+    }
     var country=event.target.value;
     var listElem;
-  var countries=fetch(url+country).then(response =>{
+
+    var countries=fetch(url+country).then(response =>{
     response.text().then(text =>{
       var countriesArray=JSON.parse(text).countries
-      var datalist= document.createElement("DIV");
-      datalist.setAttribute("id",event.target.id+"autocomplete-list");
       event.target.parentNode.appendChild(datalist);
       for(var i=0;i<countriesArray.length;i++){
-        listElem=document.createElement("DIV");
-        listElem.innerHTML="<strong>"+countriesArray[i].country+"</strong>";
-        listElem.innerHTML+=countriesArray[i].country;
-        listElem.innerHTML += "<input type='hidden' value='" +countriesArray[i].country + "'>";
-        listElem.addEventListener("input",function(e){
-        country.value = this.getElementsByTagName("input")[0].value;
-        //         closeAllLists();
-              });
-           datalist.appendChild(listElem);
+        datalist.innerHTML="<option>"+countriesArray[i].country+"</option>";
       }
 
     })
