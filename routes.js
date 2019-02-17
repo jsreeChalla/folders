@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var User = require('./user');
 
-__dirname ='/ui/';
+
 // GET route for reading data
 
 // router.post('/',function(req,res,next){

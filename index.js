@@ -1,15 +1,15 @@
-// var mongoose = require('mongoose');
-// var session = require('express-session');
-// var MongoStore = require('connect-mongo')(session);
+
 const express= require('express');
 const bodyParser= require('body-parser');
-const http =require('http');
-const fs = require('fs');
+var path = require('path');
+
 const app= express();
 const MongoClient = require('mongodb').MongoClient
+var mongojs = require('mongojs');
+var db = mongojs('localhost/userProfile');
+//var MongoClient = require('mongodb').MongoClient;
 //var url = "mongodb://localhost:27017/";
-__dirname = './ui/';
-
+__dirname ='./ui/';
 //mongoose.connect(url);
 // app.use(session({
 //   secret: 'work hard',
@@ -24,12 +24,19 @@ __dirname = './ui/';
 app.listen(3000, function() {
   console.log('listening on 3000')
 });
+let connect;
+let dbo;
+let collection;
 
-// app.get('/', function (req, res, next) {
-//   return res.sendFile(path.join(__dirname + '/login/login.html'));
+// connect= MongoClient.connect(url,function(err,db){
+//  if(err){console.log(err);}
+//  else{
+//    db.db('userProfile').collection('countries').find().toArray()
+//  return db.db('userProfile').collection('countries').find().toArray();
+// }
 // });
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended:false}));
 app.get('/', function(req, res) {
   res.sendFile('login/login.html',{root:__dirname});
 });
@@ -45,6 +52,20 @@ app.get('/register.html', function(req, res) {
 app.get('/register.js', function(req, res) {
   res.sendFile('register/register.js',{root:__dirname});
 })
-app.get('/api/search/', function(req, res) {
-  console.log(res,req);
+app.get('/api/search/',function(req, res) {
+ var countries=[], countriesList=[];
+  countries= db.countries.find({}).toArray(function (err, docs) { if(err){
+   console.log(err);
+   return err
+ }else{
+  res.send({countries: docs.filter(doc=>{
+     if(doc.country.toLowerCase().indexOf(req.query.country.toLowerCase())>-1){
+
+        return doc.country
+     }
+   })
+ })
+ }
+})
+
 })
