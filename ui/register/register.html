@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>User Profile</title>
+  <base href="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="stylesheet" type="text/css" href='../main.css' >
+<script src="./register.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="card">
+    <div class="title">
+      Register your Profile
+    </div>
+    <form class="register-form" method="post" action="" onsubmit="submitForm(event)">
+      <div class="name">
+        <span class="label">User Name</span>
+        <input class="form-control" id="name" type="text" name="" value="">
+      </div>
+      <div class="email">
+        <span class="label">Email</span>
+        <input class="form-control" id="email" type="email" name="" value="">
+      </div>
+      <div class="pword">
+        <span class="label">Enter Password </span>
+        <input type="password" id="pword" class="form-control" name="" value="">
+      </div>
+      <div class="confirm-pword">
+        <span class="label">Retype Password </span>
+        <input type="password" id="pword1" class="form-control" name="" value="">
+      </div>
+      <div class="age">
+        <span class="label">Age
+        <input style="width:50px" type="number" id="age" name="" value="">
+        </span>
+        <span class="label">Pin Code
+        <input style="width:150px" type="number" id="pin" name="" value="">
+        </span>
+      </div>
+    <div class="country">
+      <div class="label">Country</div>
+      <div class="autocomplete">
+        <input class="form-control" id="country" type="text" name="myCountry" placeholder="Country" oninput="searchCountries(event);">
+      </div>
+    </div>
+      <div class="links">
+          <span>
+            <input type="submit" name="Register"></span>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>

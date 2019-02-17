@@ -12,14 +12,22 @@
   margin:10px;
   padding:5px;
 }
+.form-control{
+  margin:10px;
+  padding:5px;
+}
 .label{
+  margin: 18px;
   min-width: 100px;
 }
+.country{
+  display: flex;
+}
 .card{
-  /* display: flex; */
-  width:350px;
+  width:800px;
   height:400px;
   margin-left: 350px;
   margin-top: 100px;
-  align-content:space-between;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
