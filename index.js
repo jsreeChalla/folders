@@ -2,7 +2,7 @@
 const express= require('express');
 const bodyParser= require('body-parser');
 var path = require('path');
-
+const bcrypt =require('bcrypt');
 const app= express();
 const MongoClient = require('mongodb').MongoClient
 var mongojs = require('mongojs');
@@ -24,19 +24,8 @@ __dirname ='./ui/';
 app.listen(3000, function() {
   console.log('listening on 3000')
 });
-let connect;
-let dbo;
-let collection;
 
-// connect= MongoClient.connect(url,function(err,db){
-//  if(err){console.log(err);}
-//  else{
-//    db.db('userProfile').collection('countries').find().toArray()
-//  return db.db('userProfile').collection('countries').find().toArray();
-// }
-// });
-
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({extended:true}));
 app.get('/', function(req, res) {
   res.sendFile('login/login.html',{root:__dirname});
 });
@@ -53,7 +42,6 @@ app.get('/register.js', function(req, res) {
   res.sendFile('register/register.js',{root:__dirname});
 })
 app.get('/api/search/',function(req, res) {
- 
   countries= db.countries.find({}).toArray(function (err, docs) { 
   if(err){
    console.log(err);
@@ -67,5 +55,52 @@ app.get('/api/search/',function(req, res) {
  })
  }
 })
-
+});
+async function hashPword(pword){
+  var salt=await bcrypt.genSaltSync(10);
+  var hash=await bcrypt.hashSync(pword,salt);
+  //console.log(salt,hash,"rywehgsdfg")
+  return hash;
+}
+app.post('/api/user/',function(req,res){
+  //console.log(req.body.body)
+ var userFormData=JSON.parse(req.body.body)
+  var existingUsers = db.users.find({$or:[{name:userFormData.name},{email:userFormData.email}]}).toArray(
+  async function (err, docs) { 
+     if(err){
+      res.send(err);
+     }else if(docs&&docs.length>0){
+       console.log(docs)
+        res.send({status:403, message:"user name or email already exists"});
+   }else{
+    var hash=await hashPword(userFormData.password)
+    //console.log(hash,"432534")
+    var result=db.users.insert({
+      name:userFormData.name,
+      password:hash,
+      email:userFormData.email,
+      age:userFormData.age,
+      pincode:userFormData.pincode,
+      country:userFormData.country
+    });
+    res.send({status:200,message:"Registration successful"})
+  }
+});
+});
+app.post('/api/loginPage/',function(req,response){
+var userFormData=JSON.parse(req.body.data);
+db.users.findOne({name:userFormData.name},function(err,docs){
+  if(err){return err;}
+  else{
+  var r=bcrypt.compare(userFormData.pword,docs.password,function(err,res){
+  if(err){
+    response.send({status:404,message:"Wrong Password"})
+  }else{
+    console.log(res)
+    response.send({status:200,message:"Welcome"})
+  }
 })
+}
+})
+
+});

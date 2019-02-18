@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" type="text/css" href='../main.css' >
+<script src="./login.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -14,18 +16,18 @@
     <div class="title">
       Login to your Profile
     </div>
-    <form class="login-form" method="post">
+    <form class="login-form" method="post" onsubmit="login(event)">
       <div class="name">
         <span class="label">User Name</span>
-        <input class="form-control" type="text" name="" value="">
+        <input class="form-control" type="text" name="" value="" id="name">
       </div>
       <div class="pword">
         <span class="label">Password </span>
-        <input  class="form-control" type="password" name="" value="">
+        <input  class="form-control" type="password" name="" value="" id="pword">
       </div>
       <div class="links">
-        <span><a href="../home.html">Login</a></span>
-          <span><a href="../register.html">Register</a></span>
+        <input type="submit" value="Login">
+         <span> <a href="../register.html">Register</a></span>
 
       </div>
     </form>
