@@ -40,13 +40,6 @@ app.get('/register.js', function(req, res) {
 app.get('/dashboard.html', function(req, res) {
   res.sendFile('dashboard.html',{root:__dirname});
 })
-// app.get('/dashboard', function(req, res) {
-//   if(!req.session.user){
-//     res.send({status:404,message:"login"}); 
-//   }else{
-//     res.send({status:200,message:'Welcome to dashboard!',session:req.session.user});
-//   }
-// });
 app.get('/logout',function(req,res){
   req.session.destroy(function(err){  
     if(err){  
