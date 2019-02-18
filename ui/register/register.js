@@ -31,21 +31,18 @@ function submitForm(event){
 }
 }
 function searchCountries(event){
-  var datalist;
-  var prev= document.getElementsByTagName('DATALIST');
-    if(prev.length>0){
-      datalist=prev[0]
-    }else{
-      var datalist= document.createElement("DATALIST");
-      datalist.setAttribute("class","autocomplete-list","id","countries");
-    }
+  var datalist = document.getElementById('countries');
+    // if(prev){
+    //   prev.remove();
+    // }
+    //var datalist= document.createElement("DATALIST");
+    // datalist.setAttribute("class","autocomplete-list","id","countries");
     var country=event.target.value;
     var listElem;
-
-    var countries=fetch(url+country).then(response =>{
+    fetch(url+country).then(response =>{
     response.text().then(text =>{
       var countriesArray=JSON.parse(text).countries
-      event.target.parentNode.appendChild(datalist);
+      //event.target.parentNode.appendChild(datalist);
       for(var i=0;i<countriesArray.length;i++){
         datalist.innerHTML="<option>"+countriesArray[i].country+"</option>";
       }

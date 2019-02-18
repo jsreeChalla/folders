@@ -53,14 +53,14 @@ app.get('/register.js', function(req, res) {
   res.sendFile('register/register.js',{root:__dirname});
 })
 app.get('/api/search/',function(req, res) {
- var countries=[], countriesList=[];
-  countries= db.countries.find({}).toArray(function (err, docs) { if(err){
+ 
+  countries= db.countries.find({}).toArray(function (err, docs) { 
+  if(err){
    console.log(err);
-   return err
+   return err;
  }else{
   res.send({countries: docs.filter(doc=>{
      if(doc.country.toLowerCase().indexOf(req.query.country.toLowerCase())>-1){
-
         return doc.country
      }
    })
