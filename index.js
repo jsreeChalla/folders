@@ -1,7 +1,7 @@
 
 const express= require('express');
 const bodyParser= require('body-parser');
-var path = require('path');
+var session=require('express-session');
 const bcrypt =require('bcrypt');
 const app= express();
 const MongoClient = require('mongodb').MongoClient
@@ -11,15 +11,11 @@ var db = mongojs('localhost/userProfile');
 //var url = "mongodb://localhost:27017/";
 __dirname ='./ui/';
 //mongoose.connect(url);
-// app.use(session({
-//   secret: 'work hard',
-//   resave: true,
-//   saveUninitialized: false
-//   saveUninitialized: false,
-//   store: new MongoStore({
-//     mongooseConnection: db
-//   })
-// }));
+app.use(session({
+  secret: 'ewqrvxfgshjfgjhgsjhfgakjeauytsdfy', // a secret key you can write your own 
+  resave: false,
+  saveUninitialized: true
+}));
 
 app.listen(3000, function() {
   console.log('listening on 3000')
@@ -41,6 +37,28 @@ app.get('/register.html', function(req, res) {
 app.get('/register.js', function(req, res) {
   res.sendFile('register/register.js',{root:__dirname});
 })
+app.get('/dashboard.html', function(req, res) {
+  res.sendFile('dashboard.html',{root:__dirname});
+})
+// app.get('/dashboard', function(req, res) {
+//   if(!req.session.user){
+//     res.send({status:404,message:"login"}); 
+//   }else{
+//     res.send({status:200,message:'Welcome to dashboard!',session:req.session.user});
+//   }
+// });
+app.get('/logout',function(req,res){
+  req.session.destroy(function(err){  
+    if(err){  
+        console.log(err); 
+        res.send({status:404,message:err.message}); 
+    }  
+    else  
+    {  
+      res.send({status:200,message:'Logged off'}); 
+    }  
+});
+});
 app.get('/api/search/',function(req, res) {
   countries= db.countries.find({}).toArray(function (err, docs) { 
   if(err){
@@ -97,6 +115,7 @@ db.users.findOne({name:userFormData.name},function(err,docs){
     response.send({status:404,message:"Wrong Password"})
   }else{
     console.log(res)
+    req.session.user=docs;
     response.send({status:200,message:"Welcome"})
   }
 })

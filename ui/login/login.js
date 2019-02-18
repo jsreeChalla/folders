@@ -13,7 +13,7 @@ function login(event){
     if(data.status!=200){
         alert(data.message)
     }else{
-        window.location.href="../main.css";
+        window.location.href="../dashboard.html";
     }
     })
 }
