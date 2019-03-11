@@ -1,28 +1,45 @@
 
 const express= require('express');
+const mongoose=require('mongoose');
 const bodyParser= require('body-parser');
-var session=require('express-session');
-const bcrypt =require('bcrypt');
+const cors = require('cors');
+const path = require('path');
+
 const app= express();
 const MongoClient = require('mongodb').MongoClient
 var mongojs = require('mongojs');
 var db = mongojs('localhost/userProfile');
-//var MongoClient = require('mongodb').MongoClient;
-//var url = "mongodb://localhost:27017/";
-__dirname ='./ui/';
-//mongoose.connect(url);
-app.use(session({
-  secret: 'ewqrvxfgshjfgjhgsjhfgakjeauytsdfy', // a secret key you can write your own 
-  resave: false,
-  saveUninitialized: true
-}));
+const route = require('./routes.js'); 
+
+var morgan =require('morgan');
+__dirname ='./ui/view/src/';
+
+//app.set('superSecret' ,config.secret);
+//app.use(morgan('dev'));
+mongoose.connect('mongodb://localhost:27017/ubuntu');
+mongoose.connection.on('connected' ,()=>{
+  console.log('connected to mongo')
+})
+mongoose.connection.on('error' ,(err)=>{
+ if(err){
+  console.log(err)
+ }
+ 
+})
 
 app.listen(3000, function() {
   console.log('listening on 3000')
 });
 
+app.use(express.static(path.join(__dirname,)))
+app.use(cors());
+
 app.use(bodyParser.urlencoded({extended:true}));
-app.get('/', function(req, res) {
+
+app.use('/api',route);
+
+
+/*app.get('/', function(req, res) {
   res.sendFile('login/login.html',{root:__dirname});
 });
 app.get('/login.js', function(req, res) {
@@ -53,7 +70,7 @@ app.get('/logout',function(req,res){
 });
 });
 app.get('/api/search/',function(req, res) {
-  countries= db.countries.find({}).toArray(function (err, docs) { 
+   countries= db.countries.find({}).toArray(function (err, docs) { 
   if(err){
    console.log(err);
    return err;
@@ -102,17 +119,24 @@ app.post('/api/loginPage/',function(req,response){
 var userFormData=JSON.parse(req.body.data);
 db.users.findOne({name:userFormData.name},function(err,docs){
   if(err){return err;}
+  else if(!docs){
+    response.send({status:403, message:"No user Found"});
+  }
   else{
   var r=bcrypt.compare(userFormData.pword,docs.password,function(err,res){
   if(err){
     response.send({status:404,message:"Wrong Password"})
   }else{
-    console.log(res)
-    req.session.user=docs;
-    response.send({status:200,message:"Welcome"})
+    var payload = {};
+    var token= jwt.sign(payload,app.get('superSecret'),{
+      expiresInMinutes:10
+    });
+    //console.log(res)
+    //req.session.user=docs;
+    response.send({token:token,status:200,message:"Welcome"})
   }
 })
 }
 })
 
-});
+});*/
